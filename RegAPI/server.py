@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 import uvicorn
+from db_logic import *
 
 app = FastAPI()
 
@@ -9,14 +10,19 @@ async def root():
     return {"message": "It's working!"}
 
 
-@app.post('/test')
-async def test(data: list):
-    print(data)
+@app.post('/registration')
+async def reg_user(user_data: list):
+    id = len(get_all_users())
+    username = user_data[0]['username']
+    name = user_data[0]['name']
+    email = user_data[0]['email']
+    age = user_data[0]['age']
+    add_user(id, username, name, email, age)
 
 
-# @app.post('/registration')
-# async def reg_user(user_data: list):
-#     print(user_data)
+@app.get('/getUsers')
+async def get_users():
+    return {"status": 200, "data": get_all_users()}
 
 
 if __name__ == "__main__":
